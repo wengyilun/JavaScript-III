@@ -34,19 +34,29 @@ function Cat(data){
     }
 }
 
+Cat.prototype.lick = function(){
+    return `${this.name} is licking his paws`
+}
+
 let niles = new Cat({name:'niles', age:12, food:'Dry Food'})
 //console.log(niles.eat())
+console.log(niles.lick())
 
 // Principle 4
 // code example for Explicit Binding
 function Dog(data){
-    this.bark = function(){
-        console.log(`Wo wo woo`)
-    }
     this.color = data.color
     Cat.call(this, data)
 }
 
+Dog.prototype.wag = function(){
+    return `${this.name} is wagging his ${this.color} tail`
+}
+
+Dog.prototype.lick = Object.create(Cat.prototype.lick)
+
+
 let lucky = new Dog({name:'Lukcy', age: 100, color:"black", food:'Dog food'})
 console.log(lucky.eat())
-console.log(lucky.bark())
+console.log(lucky.wag())
+console.log(lucky.lick())
