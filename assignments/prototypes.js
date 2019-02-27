@@ -34,14 +34,14 @@ GameObject.prototype.destroy = function(){
 
 function CharacterStats(data){
   this.healthPoints = data.healthPoints
+  GameObject.call(this, data)
 }
+
+CharacterStats.prototype = Object.create(GameObject.prototype)
 
 CharacterStats.prototype.takeDamage = function(){
   return  `${this.name} took damage.`
 }
-
-CharacterStats.prototype.destroy = Object.create(GameObject.prototype.destroy)
-
 
 /*
   === Humanoid (Having an appearance or character resembling that of a human.) ===
@@ -57,14 +57,14 @@ function Humanoid(data){
   this.team = data.team
   this.weapons = data.weapons
   this.language = data.language
+  CharacterStats.call(this, data)
 }
+
+Humanoid.prototype = Object.create(CharacterStats.prototype)
 
 Humanoid.prototype.greet = function(){
   return  `${this.name} offers a greeting in ${this.language}.`
 }
-
-Humanoid.prototype.destroy = Object.create(CharacterStats.prototype.destroy)
-Humanoid.prototype.takeDamage =  Object.create(CharacterStats.prototype.takeDamage)
 
 /*
   * Inheritance chain: GameObject -> CharacterStats -> Humanoid
@@ -89,6 +89,7 @@ Humanoid.prototype.takeDamage =  Object.create(CharacterStats.prototype.takeDama
     ],
     language: 'Common Tongue',
   });
+
 
   const swordsman = new Humanoid({
     createdAt: new Date(),
@@ -139,3 +140,91 @@ Humanoid.prototype.takeDamage =  Object.create(CharacterStats.prototype.takeDama
   // * Create Villain and Hero constructor functions that inherit from the Humanoid constructor function.  
   // * Give the Hero and Villains different methods that could be used to remove health points from objects which could result in destruction if health gets to 0 or drops below 0;
   // * Create two new objects, one a villain and one a hero and fight it out with methods!
+
+  function Villain(data){
+    Humanoid.call(this,data)
+    this.slogan = data.slogan
+  }
+
+  Villain.prototype = Object.create(Humanoid.prototype)
+  Villain.prototype.fire = function(){
+   
+    this.healthPoints-=3
+    if(this.healthPoints <= 0){
+      return `No more blood! ${this.destroy()}`
+    }
+    return `Fire!! (-${this.healthPoints} points)`
+  }
+
+
+  function Hero(data){
+    Humanoid.call(this,data)
+    this.slogan = data.slogan
+  }
+
+  Hero.prototype = Object.create(Humanoid.prototype)
+  Hero.prototype.ice = function(){
+    this.healthPoints-=3
+    if(this.healthPoints <= 0){
+      return `No more blood! ${this.destroy()}`
+    }
+    return `Ice!! (-${this.healthPoints} points)`
+  }
+
+
+  
+  const badman = new Villain({
+    createdAt: new Date(),
+    dimensions: {
+      length: 1,
+      width: 2,
+      height: 4,
+    },
+    healthPoints: 10,
+    name: 'PaulT',
+    team: 'Evil',
+    weapons: [
+      'fire'
+    ],
+    language: 'Elvish',
+    slogan: 'I will destroy you!',
+    language: 'Hahahahahhahaah'
+
+  });
+
+
+  const superwomen = new Hero({
+    createdAt: new Date(),
+    dimensions: {
+      length: 1,
+      width: 2,
+      height: 4,
+    },
+    healthPoints: 10,
+    name: 'Jane',
+    team: 'Hero',
+    weapons: [
+      'ice'
+    ],
+    language: 'good',
+    slogan: 'I will kill you with kindness',
+    language: 'That will show you'
+  });
+
+
+  console.log(badman.slogan)
+  console.log(superwomen.slogan)
+
+  console.log(superwomen.ice())
+  console.log(badman.fire())
+  console.log(superwomen.ice())
+  console.log(badman.fire())
+  console.log(superwomen.ice())
+  console.log(badman.fire())
+  console.log(superwomen.ice())
+
+  if(superwomen.healthPoints > badman.healthPoints){
+    console.log(superwomen.language)
+  }else{
+    console.log(badman.language)
+  }

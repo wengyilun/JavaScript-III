@@ -49,11 +49,12 @@ function Dog(data){
     Cat.call(this, data)
 }
 
+Dog.prototype = Object.create(Cat.prototype)
+
 Dog.prototype.wag = function(){
     return `${this.name} is wagging his ${this.color} tail`
 }
 
-Dog.prototype.lick = Object.create(Cat.prototype.lick)
 
 
 let lucky = new Dog({name:'Lukcy', age: 100, color:"black", food:'Dog food'})
